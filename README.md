@@ -36,7 +36,7 @@ An interactive chat-based air quality assistant powered by:
 ---
 
 ## 🏗️ Architecture
-
+```text
 ┌──────────────────────────────────────────────────────────────┐
 │                         USER INTERFACE                       │
 │              (Streamlit Chat UI — app/*.py)                  │
@@ -111,7 +111,7 @@ An interactive chat-based air quality assistant powered by:
 │   .env                                                       │
 │     - API keys (OpenAQ, LLM)                                │
 └──────────────────────────────────────────────────────────────┘
-
+```
 ---
 
 ## ⚙️ Setup
