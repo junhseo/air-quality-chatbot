@@ -1,0 +1,16 @@
+paths:
+  station_metadata_file: "C:\\local_code_run\\chatbot_project_airquality\\data\\STATION_GRID_COLLOCATION_METADATA.csv"
+
+api:
+  openaq:
+    base_url: "https://api.openaq.org/v3"
+    timeout: 30
+
+query:
+  default_days: 10
+  max_days: 30
+
+ui:
+  language: "en"
+  title: "Air Quality Chatbot|Dashboard"
+  page_icon: "🌬️"
