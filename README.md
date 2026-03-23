@@ -67,4 +67,4 @@ python -m streamlit run app/streamlit_chat_demo.py
 
 ## 📌 Author
 
-Junhyun Seo
+Junhyun Seo (NASA Goddard Space Flight Center / Morgan State University)
