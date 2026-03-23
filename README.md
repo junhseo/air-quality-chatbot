@@ -35,6 +35,85 @@ An interactive chat-based air quality assistant powered by:
 
 ---
 
+## 🏗️ Architecture
+
+┌──────────────────────────────────────────────────────────────┐
+│                         USER INTERFACE                       │
+│              (Streamlit Chat UI — app/*.py)                  │
+│                                                              │
+│   Chat Input │ Chat History │ Analysis Space (Plot + Table)  │
+└──────────────────────────┬───────────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    CHAT ROUTER LAYER                         │
+│               (services/chat_router.py)                      │
+│                                                              │
+│   - Intent Detection (current / advisory / historical)        │
+│   - Location Extraction                                      │
+│   - Query Parsing                                            │
+└──────────────────────────┬───────────────────────────────────┘
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+        ▼                  ▼                  ▼
+
+┌────────────────┐  ┌──────────────────────┐  ┌──────────────────────┐
+│ CURRENT SERVICE│  │ ADVISORY SERVICE     │  │ HISTORICAL SERVICE   │
+│                │  │                      │  │                      │
+│ PM2.5 lookup   │  │ Rule-based decision  │  │ Time-series builder  │
+│                │  │                      │  │ Daily aggregation    │
+└───────┬────────┘  └──────────┬───────────┘  └──────────┬───────────┘
+        │                       │                         │
+        ▼                       ▼                         ▼
+
+┌──────────────────────────────────────────────────────────────┐
+│                     DATA ACCESS LAYER                        │
+│                                                              │
+│   station_service.py                                         │
+│     - Nearest station (Haversine distance)                  │
+│                                                              │
+│   openaq_client.py                                           │
+│     - Latest measurement (current)                          │
+│     - Raw measurements (historical)                         │
+└──────────────────────────┬───────────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────┐
+│                     EXTERNAL SERVICES                        │
+│                                                              │
+│   OpenAQ API     → Real-time + historical PM2.5              │
+│   Nominatim API  → Geocoding (text → lat/lon)                │
+└──────────────────────────────────────────────────────────────┘
+
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    ANALYSIS & VISUALIZATION                  │
+│                                                              │
+│   plot_service.py                                            │
+│     - Time-series plot (PM2.5 comparison)                   │
+│                                                              │
+│   pandas aggregation                                         │
+│     - Daily average                                          │
+│     - Summary statistics (mean / max / min)                 │
+└──────────────────────────────────────────────────────────────┘
+
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    CONFIGURATION LAYER                       │
+│                                                              │
+│   config.yaml                                                │
+│     - API settings                                           │
+│     - Paths                                                  │
+│                                                              │
+│   .env                                                       │
+│     - API keys (OpenAQ, LLM)                                │
+└──────────────────────────────────────────────────────────────┘
+
+---
+
 ## ⚙️ Setup
 
 ```bash
